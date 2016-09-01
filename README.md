@@ -1,3 +1,5 @@
+Packaging for Jenkins builds with versions before 2.x
+
 # Native package script for Jenkins
 This repository contains scripts for packaging `jenkins.war` into various platform-specific native packages.
 The following platforms are currently supported:
