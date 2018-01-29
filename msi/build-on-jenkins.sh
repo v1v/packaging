@@ -33,11 +33,11 @@ fi
 # TODO switch to non-Remoting-based variant once JENKINS-49205 is released
 case "$(uname)" in
   CYGWIN*)
-    java -jar $TARGET/jenkins-cli.jar $CLI_SSH_ARGS dist-fork -z `cygpath --dos $D/bundle.tgz` -f ${ARTIFACTNAME}.war="${WAR}" -l "windows && packaging" -F "${MSI}.tmp=${ARTIFACTNAME}-windows.zip" \
-          bash -ex build.sh ${ARTIFACTNAME}.war $encodedv ${ARTIFACTNAME} "${PRODUCTNAME}" ${PORT} ${CAMELARTIFACTNAME} ;;
+    tar cfz - `cygpath --dos $D/bundle.tgz` | java -jar $TARGET/jenkins-cli.jar $CLI_SSH_ARGS dist-fork -z= -Z= -f ${ARTIFACTNAME}.war="${WAR}" -l "windows && packaging" -F "${MSI}.tmp=${ARTIFACTNAME}-windows.zip" \
+          bash -ex "tar xfz - && build.sh ${ARTIFACTNAME}.war $encodedv ${ARTIFACTNAME} \"${PRODUCTNAME}\" ${PORT} ${CAMELARTIFACTNAME} && tar cfz - ${ARTIFACTNAME}-windows.zip" | tar xfz - ;;
   *)
-    java -jar $TARGET/jenkins-cli.jar $CLI_SSH_ARGS dist-fork -z $D/bundle.tgz -f ${ARTIFACTNAME}.war="${WAR}" -l "windows && packaging" -F "${MSI}.tmp=${ARTIFACTNAME}-windows.zip" \
-          bash -ex build.sh ${ARTIFACTNAME}.war $encodedv ${ARTIFACTNAME} "${PRODUCTNAME}" ${PORT} ${CAMELARTIFACTNAME} ;;
+    tar cfz - $D/bundle.tgz | java -jar $TARGET/jenkins-cli.jar $CLI_SSH_ARGS dist-fork -z= -Z= -f ${ARTIFACTNAME}.war="${WAR}" -l "windows && packaging" -F "${MSI}.tmp=${ARTIFACTNAME}-windows.zip" \
+          bash -ex "tar xfz - && build.sh ${ARTIFACTNAME}.war $encodedv ${ARTIFACTNAME} \"${PRODUCTNAME}\" ${PORT} ${CAMELARTIFACTNAME} && tar cfz - ${ARTIFACTNAME}-windows.zip" | tar xfz - ;;
 esac
 
 mv ${MSI}.tmp ${MSI}
